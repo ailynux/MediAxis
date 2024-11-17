@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -14,47 +15,91 @@ public class HealthRecordsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<HealthRecord>> GetHealthRecords()
+    public async Task<ActionResult<IEnumerable<HealthRecord>>> GetHealthRecords()
     {
-        return await _healthRecordRepository.GetAllHealthRecordsAsync();
+        try
+        {
+            var healthRecords = await _healthRecordRepository.GetAllHealthRecordsAsync();
+            return Ok(healthRecords);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework)
+            Console.WriteLine($"Error in GetHealthRecords: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<HealthRecord>> GetHealthRecord(int id)
     {
-        var healthRecord = await _healthRecordRepository.GetHealthRecordByIdAsync(id);
-
-        if (healthRecord == null)
+        try
         {
-            return NotFound();
+            var healthRecord = await _healthRecordRepository.GetHealthRecordByIdAsync(id);
+            if (healthRecord == null)
+            {
+                return NotFound();
+            }
+            return Ok(healthRecord);
         }
-
-        return healthRecord;
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework)
+            Console.WriteLine($"Error in GetHealthRecord: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateHealthRecord(HealthRecord healthRecord)
     {
-        await _healthRecordRepository.CreateHealthRecordAsync(healthRecord);
-        return CreatedAtAction(nameof(GetHealthRecord), new { id = healthRecord.Id }, healthRecord);
+        try
+        {
+            await _healthRecordRepository.CreateHealthRecordAsync(healthRecord);
+            return CreatedAtAction(nameof(GetHealthRecord), new { id = healthRecord.Id }, healthRecord);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework)
+            Console.WriteLine($"Error in CreateHealthRecord: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateHealthRecord(int id, HealthRecord healthRecord)
     {
-        if (id != healthRecord.Id)
+        try
         {
-            return BadRequest();
-        }
+            if (id != healthRecord.Id)
+            {
+                return BadRequest();
+            }
 
-        await _healthRecordRepository.UpdateHealthRecordAsync(healthRecord);
-        return NoContent();
+            await _healthRecordRepository.UpdateHealthRecordAsync(healthRecord);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework)
+            Console.WriteLine($"Error in UpdateHealthRecord: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteHealthRecord(int id)
     {
-        await _healthRecordRepository.DeleteHealthRecordAsync(id);
-        return NoContent();
+        try
+        {
+            await _healthRecordRepository.DeleteHealthRecordAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework)
+            Console.WriteLine($"Error in DeleteHealthRecord: {ex.Message}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 }
