@@ -21,7 +21,14 @@ const App = () => {
         <Router>
           <Header />
           <Sidebar />
-          <main style={{ marginLeft: 240, padding: "1rem" }}>
+          <main
+            style={{
+              marginLeft: 240,
+              padding: "1rem",
+              paddingTop: "64px",
+              transition: "margin-left 0.3s"
+            }}
+          >
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/healthrecords" element={<HealthRecords />} />
