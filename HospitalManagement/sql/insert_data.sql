@@ -1,0 +1,1 @@
+INSERT INTO Users (Name, Email, Role, PasswordHash) VALUES ('John Doe', 'john@example.com', 'Doctor', 'hashedpassword');

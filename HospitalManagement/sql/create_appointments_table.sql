@@ -1,0 +1,7 @@
+CREATE TABLE Appointments (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    DoctorId INTEGER NOT NULL,
+    PatientId INTEGER NOT NULL,
+    AppointmentDate TEXT NOT NULL,
+    Status TEXT NOT NULL
+);

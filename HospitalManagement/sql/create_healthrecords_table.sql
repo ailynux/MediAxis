@@ -1,0 +1,7 @@
+CREATE TABLE HealthRecords (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    PatientId INTEGER NOT NULL,
+    Diagnosis TEXT NOT NULL,
+    Treatment TEXT NOT NULL,
+    Date TEXT NOT NULL
+);
